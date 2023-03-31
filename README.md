@@ -62,7 +62,7 @@ func main() {
 See the [example](https://github.com/guoshaodong/amqp-engine/tree/main/example) subdirectory for simple engine executables.
 
 ## Engine design
-![引擎设计图](https://github.com/guoshoadong/amqp-engine/-/raw/graphs/engine-design.jpg?inline=true)
+![引擎设计图](https://github.com/guoshaodong/amqp-engine/blob/graphs/engine-design.jpg?inline=true)
 
 ## Future
 1. Flexible support for type configuration, allowing developers to add types and a small amount of configuration to enable parsing of that type.
