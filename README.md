@@ -1,29 +1,29 @@
 # amqp-engine
 
-amqp-engine 是一个集成化的工具，在 AMQP 功能的基础上做了更多的简化，只暴露用户使用比较频繁的功能，也使得用户不再关注那些旁枝末节的参数。
-另一部分是异步消息引擎：在对 AMQP 进行消息处理时，用户可以像使用 [Gin](https://github.com/gin-gonic/gin) 一样，通过注册监听的队列从而对消息进行处理
+amqp-engine is an integrated tool that simplifies AMQP functionality by exposing only the frequently used features and eliminating the need for users to focus on peripheral parameters.
+Another part of it is an asynchronous message engine: when processing messages with AMQP, users can register a listening queue to handle messages similar to using [Gin](https://github.com/gin-gonic/gin).
 
 ## Get
 
     go get -u github.com/guoshaodong/amqp-engine
 
 ## Goals
-1. 整体部分
-    - 支持 connection、channel 断线监听、断线重连
-    - 在保持 AMQP 的灵活性基础上，简单易用
-    - 适配当前场景
-2. AMQP 部分
-    - 支持自由创建、删除 exchange 和 queue
-    - 支持自由绑定和解绑
-    - 支持发布不同类型的数据，并返回发布结果
-    - 场景比较复杂时，能够提供底层 amqp 应用
-3. Engine 部分
-    - 自主断线重连
-    - 拥有错误机制
-    - 支持增加中间件
-    - 支持分组功能，不同分组可以使用不同中间件
-    - 支持不同数据类型的绑定功能
-    - 用户能够自由控制订阅 Ack 机制
+1. Overall section
+   - Supports connection and channel disconnection monitoring and reconnection.
+   - Simple and easy to use while maintaining the flexibility of AMQP.
+   - Suitable for current scenarios.
+2. AMQP Section
+   - Supports creating and deleting exchanges and queues freely
+   - Supports binding and unbinding freely
+   - Supports publishing different types of data, and returns the publishing results
+   - Provides low-level AMQP applications when the scenario is more complex
+3. Engine section
+   - Autonomous reconnection
+   - Error handling mechanism
+   - Support for adding middleware
+   - Support for grouping function, different groups can use different middleware
+   - Support for binding functions of different data types
+   - Users can freely control the subscription Ack mechanism
 
 ## Quick start
 ```sh
@@ -65,7 +65,7 @@ See the [example](https://github.com/guoshaodong/amqp-engine/tree/main/example) 
 ![引擎设计图](https://github.com/guoshoadong/amqp-engine/-/raw/graphs/engine-design.jpg?inline=true)
 
 ## Future
-1. 灵活支持类型配置，使开发者加入类型和少量配置，即可支持该类型解析
-2. Engine 功能实现可拔插，只要底层实现了 Connection 和 Channel 的主要功能，即可接入引擎
-3. 增加 mustbind 进行绑定字段的强制校验，shouldbind 通过 tag:"binding" 进行强制校验控制
-4. 接入链路追踪 opentelemetry
+1. Flexible support for type configuration, allowing developers to add types and a small amount of configuration to enable parsing of that type.
+2. Engine functionality implementation is pluggable, as long as the underlying implementation has the main functions of Connection and Channel, it can be integrated into the engine.
+3. Added "mustbind" for mandatory validation of bound fields, and "shouldbind" with tag:"binding" for enforced validation control.
+4. Integration with opentelemetry for tracing of access links.
