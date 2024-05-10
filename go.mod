@@ -1,4 +1,4 @@
-module github.com/guoshaodong/amqp-engine
+module github.com/gisard/amqp-engine
 
 go 1.18
 

@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/guoshaodong/amqp-engine"
+	"github.com/gisard/amqp-engine"
 	openamqp "github.com/rabbitmq/amqp091-go"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"

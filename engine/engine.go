@@ -1,7 +1,7 @@
 package engine
 
 import (
-	"github.com/guoshaodong/amqp-engine"
+	"github.com/gisard/amqp-engine"
 	"github.com/sirupsen/logrus"
 )
 

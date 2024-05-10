@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/guoshaodong/amqp-engine/engine"
+	"github.com/gisard/amqp-engine/engine"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/proto"
 )

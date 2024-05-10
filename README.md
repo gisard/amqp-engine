@@ -5,7 +5,7 @@ Another part of it is an asynchronous message engine: when processing messages w
 
 ## Get
 
-    go get -u github.com/guoshaodong/amqp-engine
+    go get -u github.com/gisard/amqp-engine
 
 ## Goals
 1. Overall section
@@ -35,7 +35,7 @@ $ cat example/engine.go
 package main
 
 import (
-	"github.com/guoshaodong/amqp-engine/engine"
+	"github.com/gisard/amqp-engine/engine"
 )
 
 type testStruct struct {
@@ -59,10 +59,10 @@ func main() {
 ```
 
 ## Example
-See the [example](https://github.com/guoshaodong/amqp-engine/tree/main/example) subdirectory for simple engine executables.
+See the [example](https://github.com/gisard/amqp-engine/tree/main/example) subdirectory for simple engine executables.
 
 ## Engine design
-![引擎设计图](https://github.com/guoshaodong/amqp-engine/blob/graphs/engine-design.jpg?inline=true)
+![Engine design drawing](https://github.com/gisard/amqp-engine/blob/graphs/engine-design.jpg?inline=true)
 
 ## Future
 1. Flexible support for type configuration, allowing developers to add types and a small amount of configuration to enable parsing of that type.

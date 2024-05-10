@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/guoshaodong/amqp-engine"
+	"github.com/gisard/amqp-engine"
 	"google.golang.org/protobuf/types/known/emptypb"
 )
 
