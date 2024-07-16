@@ -10,9 +10,14 @@ type testStruct struct {
 	Age  int    `json:"age"`
 }
 
+type testStruct3 struct {
+	Name string `json:"name"`
+	Age  string `json:"age"`
+}
+
 // nolint
 var (
-	amqpURL = "amqp://username:password@127.0.0.1:5672/"
+	amqpURL = "amqp://guest:guest@127.0.0.1:5672/"
 
 	directExchange = "direct-exchange"
 	fanoutExchange = "fanout-exchange"
@@ -23,14 +28,14 @@ var (
 	fanoutQueue3 = "fanout-queue-3"
 
 	content     = []byte("Welcome to Asynchronous Messaging Engine !")
-	jsonContent = testStruct{
+	jsonContent = testStruct3{
 		Name: "测试json",
-		Age:  18,
+		Age:  "18",
 	}
 	protoContent = emptypb.Empty{}
 
 	defaultQueueName      = "default-queue"
-	defaultJsonQueueName  = "default-json-queue"
+	defaultJsonQueueName  = "json-queue"
 	defaultProtoQueueName = "default-proto-queue"
 )
 

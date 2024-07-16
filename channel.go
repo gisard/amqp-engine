@@ -4,10 +4,16 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 	"google.golang.org/protobuf/proto"
+)
+
+const (
+	// deadPrefix is prefix of dead queue
+	deadPrefix = "dead-"
 )
 
 // amqp channel, user should close manually when no longer used.
@@ -84,45 +90,57 @@ func (c *channel) createQueue(name string) error {
 
 	var err error
 	for i := 0; i < defaultRetryNum; i++ {
-		deadQueueName := fmt.Sprintf(deadLetterQueueFmt, name)
-		// Add dead letter exchange.
-		err = c.amqpChan.ExchangeDeclare(defaultDeadLetterExchange, string(Direct), true,
-			false, false, false, nil)
-		if err != nil {
-			if errors.Is(err, amqp.ErrClosed) {
-				_ = c.Reconnect()
+		if strings.HasPrefix(name, deadPrefix) {
+			// Create queue with dead exchange and dead queue.
+			_, err = c.amqpChan.QueueDeclare(name, true, false,
+				false, false, nil)
+			if err != nil {
+				if errors.Is(err, amqp.ErrClosed) {
+					_ = c.Reconnect()
+				}
+				continue
 			}
-			continue
-		}
-		// Add dead letter queue.
-		_, err = c.amqpChan.QueueDeclare(deadQueueName, true, false,
-			false, false, nil)
-		if err != nil {
-			if errors.Is(err, amqp.ErrClosed) {
-				_ = c.Reconnect()
+		} else {
+			deadQueueName := fmt.Sprintf(deadLetterQueueFmt, name)
+			// Add dead letter exchange.
+			err = c.amqpChan.ExchangeDeclare(defaultDeadLetterExchange, string(Direct), true,
+				false, false, false, nil)
+			if err != nil {
+				if errors.Is(err, amqp.ErrClosed) {
+					_ = c.Reconnect()
+				}
+				continue
 			}
-			continue
-		}
-		// Bind dead-queue to dead-exchange.
-		err = c.amqpChan.QueueBind(deadQueueName, deadQueueName, defaultDeadLetterExchange,
-			false, nil)
-		if err != nil {
-			if err == amqp.ErrClosed {
-				_ = c.Reconnect()
+			// Add dead letter queue.
+			_, err = c.amqpChan.QueueDeclare(deadQueueName, true, false,
+				false, false, nil)
+			if err != nil {
+				if errors.Is(err, amqp.ErrClosed) {
+					_ = c.Reconnect()
+				}
+				continue
 			}
-			continue
-		}
-		// Create queue with dead exchange and dead queue.
-		_, err = c.amqpChan.QueueDeclare(name, true, false,
-			false, false, amqp.Table{
-				"x-dead-letter-exchange":    defaultDeadLetterExchange,
-				"x-dead-letter-routing-key": deadQueueName,
-			})
-		if err != nil {
-			if errors.Is(err, amqp.ErrClosed) {
-				_ = c.Reconnect()
+			// Bind dead-queue to dead-exchange.
+			err = c.amqpChan.QueueBind(deadQueueName, deadQueueName, defaultDeadLetterExchange,
+				false, nil)
+			if err != nil {
+				if err == amqp.ErrClosed {
+					_ = c.Reconnect()
+				}
+				continue
 			}
-			continue
+			// Create queue with dead exchange and dead queue.
+			_, err = c.amqpChan.QueueDeclare(name, true, false,
+				false, false, amqp.Table{
+					"x-dead-letter-exchange":    defaultDeadLetterExchange,
+					"x-dead-letter-routing-key": deadQueueName,
+				})
+			if err != nil {
+				if errors.Is(err, amqp.ErrClosed) {
+					_ = c.Reconnect()
+				}
+				continue
+			}
 		}
 		return nil
 	}

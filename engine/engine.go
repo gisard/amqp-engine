@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"fmt"
+
 	"github.com/gisard/amqp-engine"
 	"github.com/sirupsen/logrus"
 )
@@ -121,7 +123,7 @@ func (e *Engine) restart() (err error) {
 		e.queues[idx].index = int8(idx)
 		e.queues[idx].closeErr = e.channelClose
 		go e.queues[idx].run()
-		logrus.Infof("Begin listening queue: %s\n", e.queues[idx].name)
+		logrus.Infof("Begin listening queue: %s", e.queues[idx].name)
 	}
 	e.isClosed = false
 	return nil
@@ -153,7 +155,7 @@ func (e *Engine) check() error {
 			return ErrQueueNameIsEmpty
 		}
 		if _, ok := queueMap[router.name]; ok {
-			return ErrQueueNameNotUnique
+			return fmt.Errorf(ErrQueueNameNotUniqueFmt, router.name)
 		}
 		queueMap[router.name] = nil
 	}

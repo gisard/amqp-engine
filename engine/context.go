@@ -250,7 +250,7 @@ func (c *Context) ShouldBindProto(desc interface{}) error {
 // ShouldBind parser to desc by specific format.
 func (c *Context) ShouldBind(format amqp.Format, desc interface{}) error {
 	if desc == nil || reflect.TypeOf(desc).Kind() != reflect.Pointer {
-		return ErrSubscribeDescIsNotPoint
+		return errors.WithStack(ErrSubscribeDescIsNotPoint)
 	}
 
 	content := c.delivery.Body
@@ -263,7 +263,7 @@ func (c *Context) ShouldBind(format amqp.Format, desc interface{}) error {
 		}
 	case amqp.ProtoFormat:
 		if _, ok := desc.(proto.Message); !ok {
-			return ErrProtoFormatNotMatch
+			return errors.WithStack(ErrProtoFormatNotMatch)
 		}
 		err = proto.Unmarshal(content, desc.(proto.Message))
 		if err != nil {

@@ -2,8 +2,6 @@ package engine
 
 import (
 	"errors"
-	"strings"
-
 	"github.com/gisard/amqp-engine"
 	openamqp "github.com/rabbitmq/amqp091-go"
 	"github.com/sirupsen/logrus"
@@ -30,10 +28,8 @@ func (q *queue) run() {
 	defer func() {
 		q.stop()
 	}()
-	if !strings.HasPrefix(q.name, deadPrefix) {
-		// Create default queue with name will return err when queue is exist and ignore it.
-		_ = q.channel.CreateQueues(q.name)
-	}
+	// Create default queue with name will return err when queue is exist and ignore it.
+	_ = q.channel.CreateQueues(q.name)
 
 	deliveryChain, err := q.channel.Subscribe(q.name)
 	for err != nil {
@@ -47,7 +43,7 @@ func (q *queue) run() {
 		}
 	}
 	closeChan := q.channel.NotifyClose()
-	logrus.Infof("Begin listening queue: %s\n", q.name)
+	logrus.Infof("Begin listening queue: %s", q.name)
 
 	for {
 		select {

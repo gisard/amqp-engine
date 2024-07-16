@@ -16,6 +16,10 @@ var (
 )
 
 const (
+	ErrQueueNameNotUniqueFmt = "queue name is not unique: %s"
+)
+
+const (
 	DefaultRouterGroupName = ""
 
 	defaultRetryNum = 5
@@ -25,8 +29,4 @@ const abortIndex int8 = math.MaxInt8 / 2
 
 const (
 	operateFinished = "处理完成"
-)
-
-const (
-	deadPrefix = "dead-"
 )

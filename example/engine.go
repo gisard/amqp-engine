@@ -9,6 +9,12 @@ import (
 )
 
 // nolint
+type testStruct2 struct {
+	Name string `json:"name"`
+	Age  string `json:"age"`
+}
+
+// nolint
 type testStruct1 struct {
 	Name string `json:"name"`
 	Age  int    `json:"age"`
@@ -17,11 +23,12 @@ type testStruct1 struct {
 // nolint
 func main() {
 	var (
-		amqpURL = "amqp://username:password@49.232.70.87:5672/"
+		amqpURL = "amqp://guest:guest@127.0.0.1:5672/"
 
-		defaultQueueName = "ctx-queue"
-		jsonQueueName    = "json-queue"
-		protoQueueName   = "proto-queue"
+		defaultQueueName  = "ctx-queue"
+		deadJsonQueueName = "dead-json-queue"
+		jsonQueueName     = "json-queue"
+		protoQueueName    = "proto-queue"
 
 		publishDefaultQueueName      = "publish-default-queue"
 		publishDefaultJsonQueueName  = "publish-default-json-queue"
@@ -59,6 +66,15 @@ func main() {
 		logrus.Info("开始处理 json")
 		ctx.Next()
 		logrus.Info("结束处理 json")
+	})
+	jsonGroup.Handle(deadJsonQueueName, false, func(ctx *engine.Context) error {
+		var s1 testStruct2
+		err := ctx.ShouldBindJson(&s1)
+		if err != nil {
+			return err
+		}
+		logrus.Infof("获取 %s 内容为：%v", jsonQueueName, s1)
+		return nil
 	})
 	jsonGroup.Handle(jsonQueueName, false, func(ctx *engine.Context) error {
 		var s1 testStruct1
