@@ -3,6 +3,7 @@ module github.com/gisard/amqp-engine
 go 1.18
 
 require (
+	github.com/pkg/errors v0.9.1
 	github.com/rabbitmq/amqp091-go v1.3.4
 	github.com/sirupsen/logrus v1.9.0
 	google.golang.org/protobuf v1.28.1

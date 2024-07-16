@@ -2,6 +2,7 @@ package engine
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/gisard/amqp-engine"
 	openamqp "github.com/rabbitmq/amqp091-go"
@@ -29,8 +30,10 @@ func (q *queue) run() {
 	defer func() {
 		q.stop()
 	}()
-	// Create default queue with name will return err when queue is exist and ignore it.
-	_ = q.channel.CreateQueues(q.name)
+	if !strings.HasPrefix(q.name, deadPrefix) {
+		// Create default queue with name will return err when queue is exist and ignore it.
+		_ = q.channel.CreateQueues(q.name)
+	}
 
 	deliveryChain, err := q.channel.Subscribe(q.name)
 	for err != nil {

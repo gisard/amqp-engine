@@ -8,14 +8,16 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
-type consumeStruct struct {
+// nolint
+type testStruct1 struct {
 	Name string `json:"name"`
 	Age  int    `json:"age"`
 }
 
+// nolint
 func main() {
 	var (
-		amqpURL = "amqp://username:password@localhost:5672/"
+		amqpURL = "amqp://username:password@49.232.70.87:5672/"
 
 		defaultQueueName = "ctx-queue"
 		jsonQueueName    = "json-queue"
@@ -59,7 +61,7 @@ func main() {
 		logrus.Info("结束处理 json")
 	})
 	jsonGroup.Handle(jsonQueueName, false, func(ctx *engine.Context) error {
-		var s1 consumeStruct
+		var s1 testStruct1
 		err := ctx.ShouldBindJson(&s1)
 		if err != nil {
 			return err
@@ -68,7 +70,7 @@ func main() {
 		return nil
 	})
 	jsonGroup.Handle(publishDefaultJsonQueueName, false, func(ctx *engine.Context) error {
-		var s1 consumeStruct
+		var s1 testStruct1
 		err := ctx.ShouldBindJson(&s1)
 		if err != nil {
 			return err

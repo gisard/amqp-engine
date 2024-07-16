@@ -12,7 +12,7 @@ type testStruct struct {
 
 // nolint
 var (
-	amqpURL = "amqp://username:password@localhost:5672/"
+	amqpURL = "amqp://username:password@127.0.0.1:5672/"
 
 	directExchange = "direct-exchange"
 	fanoutExchange = "fanout-exchange"
@@ -35,7 +35,7 @@ var (
 )
 
 // nolint
-func main1() {
+func main() {
 	conn, err := amqp.New(amqpURL)
 	if err != nil {
 		panic(err)
