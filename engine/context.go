@@ -12,6 +12,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/gisard/amqp-engine"
 	"github.com/pkg/errors"
 	openamqp "github.com/rabbitmq/amqp091-go"
@@ -63,6 +64,10 @@ func logger() HandlerFunc {
 				logrus.WithFields(logMap).Info()
 			} else {
 				logrus.WithFields(logMap).Errorf("%s", ctx.err.Error())
+				sentry.WithScope(func(scope *sentry.Scope) {
+					scope.SetExtras(logMap)
+					sentry.CaptureException(ctx.err)
+				})
 			}
 		}()
 	}

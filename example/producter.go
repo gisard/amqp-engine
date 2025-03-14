@@ -40,7 +40,7 @@ var (
 )
 
 // nolint
-func main() {
+func main1() {
 	conn, err := amqp.New(amqpURL)
 	if err != nil {
 		panic(err)
